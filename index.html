@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f8f6">
+  <meta name="description" content="Integrated heavy rainfall early warning and inundation prediction dashboard.">
+  <title>Rainwatch | Predict. Protect. Prevent.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="Rainwatch home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-name">rainwatch<span class="brand-dot">.</span><small>MONSOON INTELLIGENCE</small></span>
+      </a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="primary-nav">
+        <a class="nav-link active" href="#overview"><span class="nav-glyph">◫</span>Overview</a>
+        <a class="nav-link" href="#map-section"><span class="nav-glyph">⌖</span>India map<span class="nav-count">MAP</span></a>
+        <a class="nav-link" href="#live-monitor"><span class="nav-glyph">↯</span>Heavy rain monitor<span class="nav-count">LIVE</span></a>
+        <a class="nav-link" href="#alerts"><span class="nav-glyph">♧</span>My alerts</a>
+        <a class="nav-link" href="#team"><span class="nav-glyph">◎</span>About the team</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-weather">
+          <span class="weather-sun" aria-hidden="true">☼</span>
+          <div><strong>Monsoon watch</strong><span>Regional monitoring · India</span></div>
+        </div>
+        <div class="sidebar-foot">A STUDENT INNOVATION PROJECT<br>BUILT FOR COMMUNITY SAFETY</div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>rainwatch<span class="brand-dot">.</span></div>
+        <div class="location-select"><span class="location-pin">⌖</span><span><small>DEMO COVERAGE · ALL INDIA</small><strong id="dashboard-location">Pune District, Maharashtra</strong></span><span class="chevron">⌄</span></div>
+        <div class="topbar-meta"><span class="data-status"><span></span> <span id="system-status">DEMO MODE · SIMULATED DATA</span></span><span class="top-divider"></span><span id="current-time">--:-- IST</span><button class="icon-button" id="refresh-button" aria-label="Refresh demo data" title="Refresh demo data">↻</button></div>
+      </header>
+
+      <div class="page-content">
+        <section class="page-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span>SMART INDIA HACKATHON · FLOOD EARLY WARNING</div><h1>See the rain coming. <span>Act sooner.</span></h1><p class="page-subtitle">AI-assisted rainfall and inundation outlook for Pune District.</p></div>
+          <div class="demo-badge"><span></span> DEMO MODE <small>SIMULATED DATA</small></div>
+          <div class="heading-date"><span class="date-dot"></span><span id="current-date">MONSOON MONITORING</span></div>
+        </section>
+
+        <section class="location-picker" aria-label="Select a demo location">
+          <div class="location-picker-copy"><span class="section-kicker">EXPLORE INDIA</span><strong>Choose your monitoring area</strong><small>Demo weather and flood predictions update for each location.</small></div>
+          <label for="state-select">STATE / UNION TERRITORY<select id="state-select" name="state"></select></label>
+          <label for="city-select">CITY / DISTRICT<select id="city-select" name="city"></select></label>
+          <button id="run-prediction-top" class="simulate-button" type="button">Run Prediction <span>↻</span></button>
+          <span class="location-picker-status" id="location-picker-status" aria-live="polite">DEMO DATA · Pune, Maharashtra</span>
+        </section>
+
+        <section class="alert-banner" aria-label="Current regional alert">
+          <div class="alert-symbol">!</div>
+          <div class="alert-copy"><strong id="headline-alert">Heavy rainfall detected. Flood risk is HIGH.</strong><span id="alert-guidance">Please move to a safe area. Follow local authorities for official emergency guidance.</span></div>
+          <div class="alert-valid"><small>DEMO ALERT</small><strong>SIMULATED</strong></div>
+          <a href="#live-monitor" class="alert-action">Monitor heavy rain <span>→</span></a>
+        </section>
+
+        <section class="metric-grid" aria-label="Current weather indicators">
+          <article class="metric-card rainfall-card"><div class="metric-top"><span class="metric-label">CURRENT RAINFALL · 3 HOURS</span><span class="metric-icon rain-icon">〰</span></div><div class="metric-value"><strong id="rainfall-value">78</strong><span>mm</span></div><div class="metric-bottom"><span class="trend-chip up">↑ HEAVY</span><span id="rainfall-context">DEMO DATA · 3-hour total</span><div class="sparkline rain-spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></article>
+          <article class="metric-card weather-card"><div class="metric-top"><span class="metric-label">TEMPERATURE · SIMULATED</span><span class="metric-icon weather-icon">☁</span></div><div class="metric-value"><strong id="temperature-value">25.9</strong><span>°C</span></div><div class="metric-bottom"><span id="condition-value">Heavy rainfall · demo</span><span class="weather-detail"><span id="humidity-value">72</span>% humidity</span><span class="weather-detail"><span id="wind-value">12</span> km/h wind</span></div></article>
+          <article class="metric-card flood-card"><div class="metric-top"><span class="metric-label">FLOOD RISK · NEXT 3 HOURS</span><span class="metric-icon flood-icon">⌁</span></div><div class="metric-value"><strong id="risk-value">HIGH</strong><span id="risk-level">DANGER</span></div><div class="metric-bottom"><span class="risk-pill" id="risk-probability">86% likelihood</span><span>DEMO PREDICTION</span><div class="probability-track"><span id="risk-track"></span></div></div></article>
+          <article class="metric-card river-card"><div class="metric-top"><span class="metric-label">RIVER LEVEL · MULA</span><span class="metric-icon river-icon">≋</span></div><div class="metric-value"><strong id="water-level-value">4.8</strong><span>m</span></div><div class="metric-bottom"><span class="trend-chip up">↑ RISING</span><span>DEMO GAUGE</span><div class="river-track"><span></span><i></i></div></div></article>
+        </section>
+
+        <section class="map-layout" id="map-section">
+          <article class="map-panel">
+            <div class="panel-heading"><div><div class="section-kicker">PUNE DISTRICT · AFFECTED AREA</div><h2>Rainfall & inundation map</h2></div><div class="map-controls"><button class="map-filter selected" data-layer="rain" aria-pressed="true"><span class="legend-dot rain-dot"></span>Rainfall</button><button class="map-filter selected" data-layer="flood" aria-pressed="true"><span class="legend-dot flood-dot"></span>Flood zones</button></div></div>
+            <div class="map-wrap"><div id="map" role="img" aria-label="Interactive map of Pune showing demo rainfall and predicted flood-prone areas"></div><div class="map-live"><span></span>DEMO AFFECTED AREA</div><div class="map-scale"><span>LOW</span><i></i><span>HIGH</span></div><div class="map-zoom-note">Tap a zone for details</div></div>
+            <div class="map-footer"><span><span class="source-pulse"></span>Region <strong id="weather-place">Pune District, Maharashtra</strong></span><span>Overlay <strong>DEMO DATA</strong></span><button id="locate-button" class="text-button">⌖ View affected area</button></div>
+          </article>
+
+          <aside class="outlook-panel">
+            <div class="outlook-header"><div><div class="section-kicker">DEMO FORECAST · NEXT 3 HOURS</div><h2>Rainfall forecast</h2></div><span class="outlook-weather">☁</span></div>
+            <div class="outlook-summary"><strong id="forecast-summary">Intense rainfall likely to continue</strong><span>Predicted accumulation · mm per hour</span></div>
+            <div class="hourly-chart" aria-label="Demo rainfall forecast for the next three hours"><div class="chart-grid"><span>40</span><span>20</span><span>0</span></div><div class="chart-bars"><div class="chart-col"><i class="forecast-bar" style="height:88%"></i><span>+1h</span></div><div class="chart-col peak"><i class="forecast-bar" style="height:98%"></i><span>+2h</span></div><div class="chart-col"><i class="forecast-bar" style="height:72%"></i><span>+3h</span></div></div></div>
+            <div class="outlook-divider"></div>
+            <div class="safe-zone-head"><div><div class="section-kicker">AI/ML MODEL OUTPUT</div><h3>Predicted flood-prone areas</h3></div><span class="safe-count" id="affected-count">3</span></div>
+            <ul class="safe-list" id="affected-area-list"><li><span class="safe-icon">!</span><span><strong>Kasba Peth · Mula riverbank</strong><small>High inundation potential · DEMO</small></span><span class="safe-arrow">↗</span></li><li><span class="safe-icon">!</span><span><strong>Shivajinagar low-lying roads</strong><small>Surface flooding potential · DEMO</small></span><span class="safe-arrow">↗</span></li><li><span class="safe-icon">!</span><span><strong>Yerawada riverside</strong><small>River overflow potential · DEMO</small></span><span class="safe-arrow">↗</span></li></ul>
+            <a class="route-link" href="#prediction">Run an updated prediction <span>↓</span></a>
+          </aside>
+        </section>
+
+        <section class="trend-grid" aria-label="Demo rainfall and water level trends">
+          <article class="trend-panel"><div class="trend-heading"><div><div class="section-kicker">RAINFALL HISTORY & FORECAST</div><h2>Rainfall trend</h2></div><span class="demo-tag">DEMO DATA · mm</span></div><div class="trend-chart rainfall-trend" role="img" aria-label="Rainfall trend increasing to 78 millimeters with forecast for three hours"><div class="trend-y-axis"><span>100</span><span>50</span><span>0</span></div><div class="trend-plot"><div class="trend-gridlines"><i></i><i></i><i></i></div><svg viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="rain-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#168e86" stop-opacity=".22"/><stop offset="1" stop-color="#168e86" stop-opacity="0"/></linearGradient></defs><path class="rain-area" d="M0 126 L100 108 L200 90 L300 67 L400 39 L500 20 L600 44 L600 150 L0 150 Z"/><polyline class="rain-line" points="0,126 100,108 200,90 300,67 400,39 500,20 600,44"/></svg><div class="trend-x-axis"><span>-2h</span><span>-1h</span><span>Now</span><span>+1h</span><span>+2h</span><span>+3h</span></div></div></div></article>
+          <article class="trend-panel"><div class="trend-heading"><div><div class="section-kicker">RIVER GAUGE · MULA</div><h2>Water-level trend</h2></div><span class="demo-tag">DEMO DATA · m</span></div><div class="trend-chart water-trend" role="img" aria-label="Mula River demo water level rising over six hours"><div class="trend-y-axis"><span>6.0</span><span>4.0</span><span>2.0</span></div><div class="trend-plot"><div class="trend-gridlines"><i></i><i></i><i></i></div><svg viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="water-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#518aa7" stop-opacity=".2"/><stop offset="1" stop-color="#518aa7" stop-opacity="0"/></linearGradient></defs><path class="water-area" d="M0 110 L100 102 L200 88 L300 78 L400 59 L500 45 L600 25 L600 150 L0 150 Z"/><polyline class="water-line" points="0,110 100,102 200,88 300,78 400,59 500,45 600,25"/></svg><div class="trend-x-axis"><span>-6h</span><span>-5h</span><span>-4h</span><span>-3h</span><span>-2h</span><span>-1h</span><span>Now</span></div></div></div></article>
+        </section>
+
+        <section class="prediction-panel" id="prediction" aria-labelledby="prediction-title">
+          <div class="prediction-copy"><div class="section-kicker">AI / ML · INUNDATION PREDICTION</div><h2 id="prediction-title">See where water could rise next.</h2><p>Demo model combines rainfall intensity, river gauge trend, terrain and drainage indicators to estimate localized flood exposure.</p><div class="risk-legend" aria-label="Risk level legend"><span class="risk-normal">Normal</span><span class="risk-watch">Watch</span><span class="risk-warning">Warning</span><span class="risk-danger active" id="legend-danger">Danger</span></div></div>
+          <div class="prediction-result"><div class="prediction-result-top"><span class="prediction-status"><span></span> <span id="prediction-status">PREDICTION READY · DEMO</span></span><span class="demo-tag">SIMULATED MODEL</span></div><div class="prediction-main"><strong id="prediction-risk">HIGH</strong><span id="prediction-confidence">86% confidence · next 3 hours</span></div><p id="prediction-detail">Heavy rainfall may cause localized inundation near low-lying river corridors.</p><button id="run-prediction" class="simulate-button" type="button">Run Prediction <span>↻</span></button><p id="prediction-updated" class="prediction-updated" aria-live="polite">Sample model output · Pune District</p></div>
+        </section>
+
+        <section class="simulation-panel" id="alert-simulator" aria-labelledby="simulation-title">
+          <div class="simulation-intro"><div class="section-kicker">ALERT PREVIEW · DEMO</div><h2 id="simulation-title">Preview a notification.</h2><p>Preview the exact alert text before simulating delivery.</p></div>
+          <form id="simulation-form" class="simulation-form">
+            <label class="simulation-field" for="simulation-hazard">SCENARIO<select id="simulation-hazard" name="hazard"><option value="Heavy rainfall drill" selected>Heavy rainfall drill</option><option value="Flash flood drill">Flash flood drill</option></select></label>
+            <label class="simulation-field" for="simulation-location">LOCATION<input id="simulation-location" name="location" value="Pune, Maharashtra" required></label>
+            <button class="simulate-button" type="submit">Preview test message <span>→</span></button>
+            <p class="simulation-note">DEMO DATA. No live hazard is checked; previewing does not contact anyone.</p>
+          </form>
+          <div id="simulation-result" class="simulation-result" hidden role="status" aria-live="polite"><strong>SMS PREVIEW · NOT SENT</strong><p id="simulation-message"></p></div>
+        </section>
+
+        <section class="delivery-panel" id="delivery-test" aria-labelledby="delivery-title">
+          <div class="delivery-intro"><div class="section-kicker">EMAIL · TWILIO · REAL OR DEMO DELIVERY</div><h2 id="delivery-title">Send a Rainwatch alert.</h2><p>Choose DEMO to preview locally, or REAL DELIVERY to send through Gmail SMTP or your configured Twilio account.</p></div>
+          <form id="delivery-form" class="delivery-form">
+            <label class="delivery-field" for="delivery-mode">DELIVERY MODE<select id="delivery-mode" name="mode"><option value="demo" selected>DEMO MODE · no message sent</option><option value="real">REAL DELIVERY · Email / Twilio</option></select></label>
+            <label id="delivery-recipient-label" class="delivery-field" for="delivery-recipient">PHONE NUMBER · E.164<input id="delivery-recipient" name="recipient" type="tel" inputmode="tel" autocomplete="tel" placeholder="+919876543210" pattern="\+[1-9][0-9]{7,14}" required></label>
+            <label class="delivery-field" for="delivery-channel">CHANNEL<select id="delivery-channel" name="channel"><option value="WhatsApp" selected>WhatsApp</option><option value="SMS">SMS</option><option value="Email">Email</option></select></label>
+            <label class="delivery-field" for="delivery-location">LOCATION<input id="delivery-location" name="location" type="text" maxlength="120" value="Pune District, Maharashtra" required></label>
+            <label class="weather-consent delivery-consent"><input id="delivery-consent" name="consent" type="checkbox">I authorize one message to this recipient. Alert includes simulated demo predictions.</label>
+            <button id="delivery-submit" class="delivery-button" type="submit">Preview Demo Alert <span>→</span></button>
+            <p id="provider-status" class="provider-status" role="status" aria-live="polite">DEMO MODE selected. No real message will be sent.</p>
+            <div class="outgoing-preview" aria-live="polite"><div class="outgoing-preview-title"><span class="whatsapp-mark">WA</span><span id="outgoing-preview-label">WHATSAPP MESSAGE PREVIEW · NOT SENT</span></div><pre id="outgoing-preview-message"></pre></div>
+            <p class="delivery-note">REAL DELIVERY sends email via Gmail SMTP or SMS/approved WhatsApp templates via Twilio. DEMO MODE never contacts the recipient. Credentials stay on the server. Email success means Gmail SMTP accepted the message; inbox delivery is not guaranteed.</p>
+          </form>
+        </section>
+
+        <section class="live-monitor-panel" id="live-monitor" aria-labelledby="live-monitor-title">
+          <div class="live-monitor-intro">
+            <div class="section-kicker">LIVE RAINFALL MONITOR · MODEL-BASED DATA</div>
+            <h2 id="live-monitor-title">Monitor every listed city and district.</h2>
+            <p id="live-monitor-description">Checks all 131 listed cities and districts in India using <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a>, immediately and every 5 minutes while this page is open. See past-24-hour rainfall progress, next-hour rain, estimated rain start, and any forecast 24-hour heavy-rain threshold crossing. A separate real alert is attempted when a location reaches the threshold or a crossing is forecast within 24 hours. Model forecasts are not official IMD observations or warnings.</p>
+          </div>
+          <div class="live-monitor-reading">
+            <strong id="live-monitor-rainfall">0</strong><span>cities / districts checked</span>
+            <small id="live-monitor-updated">Coverage: 131 cities and districts across India</small>
+          </div>
+          <label class="weather-consent monitor-consent" for="monitor-consent"><input id="monitor-consent" type="checkbox">I consent to ongoing India-wide monitoring and authorize a separate alert to the recipient and channel above for each city or district where heavy rain is detected. This can send multiple messages.</label>
+          <button id="monitor-toggle" class="delivery-button monitor-button" type="button">Start Live Monitoring <span>◉</span></button>
+          <p id="live-monitor-status" class="provider-status" role="status" aria-live="polite">Stopped. Select REAL DELIVERY and configure the recipient and channel above before starting.</p>
+          <details id="live-monitor-results" class="live-monitor-results">
+            <summary>View live readings, rainfall progress, and hourly outlook for all monitored locations</summary>
+            <ul id="live-monitor-list"></ul>
+          </details>
+        </section>
+
+        <section class="lower-grid" id="alerts">
+          <article class="signup-panel">
+            <div class="lower-heading"><div><div class="section-kicker">LOCAL PREVIEW · DEMO ONLY</div><h2>Preview a flood-risk alert.</h2><p>Simulate an on-screen WhatsApp/SMS alert without contacting a recipient.</p></div><span class="signup-art" aria-hidden="true">⌁</span></div>
+            <form id="signup-form" class="signup-form">
+              <label for="phone">PHONE NUMBER</label>
+              <div class="phone-input"><span>+91</span><input id="phone" name="phone" type="tel" inputmode="numeric" placeholder="98765 43210" pattern="[0-9 ]{10,12}" required></div>
+              <label for="user-location">YOUR LOCATION</label>
+              <div class="location-input"><span>⌖</span><input id="user-location" name="location" type="text" maxlength="120" placeholder="Area or city name" required></div>
+              <fieldset><legend>DELIVERY CHANNELS</legend><div class="channel-options">
+                <label class="channel-option"><input type="checkbox" name="channel" value="WhatsApp" checked><span class="checkbox-ui">✓</span>WhatsApp</label>
+                <label class="channel-option"><input type="checkbox" name="channel" value="SMS" checked><span class="checkbox-ui">✓</span>SMS</label>
+              </div></fieldset>
+              <label class="weather-consent"><input id="weather-consent" name="consent" type="checkbox" checked required>Preview a DEMO DATA alert locally. No real message will be sent.</label>
+              <button id="weather-submit" type="submit" class="primary-button">Preview Demo Alert <span>→</span></button>
+              <p class="form-note">DEMO ONLY: this preview stays in your browser. To send a real alert, select REAL DELIVERY in the Twilio panel above.</p>
+              <div id="signup-status" class="form-status" role="status" aria-live="polite"></div>
+            </form>
+          </article>
+
+          <article class="team-panel" id="team"><div class="section-kicker">THE PEOPLE BEHIND RAINWATCH</div><h2>Built with purpose.</h2><p class="team-intro">Six student innovators, bringing weather intelligence closer to the people who need it.</p><div class="team-list"><div class="team-member"><span class="member-avatar avatar-a">AS</span><span><strong>Aarav Shah</strong><small>AI / ML Lead</small></span></div><div class="team-member"><span class="member-avatar avatar-b">MK</span><span><strong>Meera Kulkarni</strong><small>Meteorology</small></span></div><div class="team-member"><span class="member-avatar avatar-c">RP</span><span><strong>Rohan Patil</strong><small>Data Engineering</small></span></div><div class="team-member"><span class="member-avatar avatar-d">SN</span><span><strong>Sana Naik</strong><small>Geospatial Systems</small></span></div><div class="team-member"><span class="member-avatar avatar-e">VK</span><span><strong>Vikram Kale</strong><small>Product & Research</small></span></div><div class="team-member"><span class="member-avatar avatar-f">AI</span><span><strong>Anaya Iyer</strong><small>Community Outreach</small></span></div></div><div class="team-footnote"><span>✳</span> Sample roster · Community first.</div></article>
+
+          <article class="contact-panel" id="contact"><div class="section-kicker">WE’RE LISTENING</div><h2>Send us a note.</h2><p>Questions, local observations, or feedback help us make every warning more useful.</p><form id="contact-form" class="contact-form"><label for="contact-email">EMAIL</label><input id="contact-email" type="email" placeholder="you@example.com" required><label for="contact-message">YOUR MESSAGE</label><textarea id="contact-message" rows="3" placeholder="What would you like us to know?" required></textarea><button class="secondary-button" type="submit">Send feedback <span>→</span></button><div id="contact-status" class="form-status" role="status" aria-live="polite"></div></form></article>
+        </section>
+
+        <footer class="page-footer"><a class="footer-brand" href="#overview">rainwatch<span>.</span></a><span>AI/ML-BASED INTEGRATED HEAVY RAINFALL EARLY WARNING & INUNDATION PREDICTION SYSTEM</span><span class="footer-tagline">Predict. Protect. Prevent.</span></footer>
+      </div>
+    </main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <div class="demo-toast" id="demo-toast" role="status" aria-live="assertive" tabindex="-1" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
